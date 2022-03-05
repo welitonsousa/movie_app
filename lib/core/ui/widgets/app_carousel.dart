@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class AppCarousel extends StatefulWidget {
@@ -16,6 +18,28 @@ class AppCarousel extends StatefulWidget {
 class _AppCarouselState extends State<AppCarousel> {
   final imageIndex = ValueNotifier(0);
   final pageController = PageController();
+
+  @override
+  initState() {
+    Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (mounted) {
+        if (imageIndex.value < widget.images.length - 1) {
+          pageController.nextPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.linear,
+          );
+        } else {
+          timer.cancel();
+          pageController.animateToPage(
+            0,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.linear,
+          );
+        }
+      }
+    });
+    super.initState();
+  }
 
   @override
   void dispose() {

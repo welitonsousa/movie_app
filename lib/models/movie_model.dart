@@ -1,3 +1,5 @@
+import 'package:movie_app/env.dart';
+
 class MovieModel {
   String title;
   String description;
@@ -17,12 +19,11 @@ class MovieModel {
   });
 
   factory MovieModel.fromMap(map) {
-    const imageBase = 'https://image.tmdb.org/t/p/w300/';
     return MovieModel(
       title: map['title'] ?? '',
       description: map['overview'] ?? '',
-      poster: imageBase + map['poster_path'],
-      picture: imageBase + map['backdrop_path'],
+      poster: Env.IMAGE_BASE + map['poster_path'],
+      picture: Env.IMAGE_BASE + map['backdrop_path'],
       id: map['id']?.toInt() ?? 0,
       countAverage: map['vote_count']?.toInt() ?? 0,
       average: map['vote_average']?.toDouble() ?? 0.0,
