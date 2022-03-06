@@ -23,11 +23,6 @@ class TopRatedController extends GetxController {
   List<ActorModel> get actors => [..._actors];
   bool get loading => _loading.value;
 
-  Future<void> findAllGeneris() async {
-    final res = await _moviesRepository.findAllGenre();
-    genres.addAll(res);
-  }
-
   Future<void> findPlayingNow() async {
     final res = await _moviesRepository.findPlayingNow();
     _playingNow.assignAll(res);
@@ -43,14 +38,19 @@ class TopRatedController extends GetxController {
     _actors.assignAll(res);
   }
 
+  Future<void> findAllGenres() async {
+    final res = await _moviesRepository.findAllGenre();
+    _genres.assignAll(res);
+  }
+
   @override
   void onInit() async {
     _loading(true);
     await Future.wait([
-      findAllGeneris(),
       findPlayingNow(),
       findTopMovies(),
-      findActorsOfWeek()
+      findActorsOfWeek(),
+      findAllGenres(),
     ]);
     _loading(false);
     super.onInit();

@@ -1,6 +1,10 @@
 import 'package:get/route_manager.dart';
 import 'package:movie_app/modules/movie_detail/movie_detail_bindings.dart';
 import 'package:movie_app/modules/movie_detail/movie_detail_page.dart';
+import 'package:movie_app/modules/movies_by_genre/movies_by_genre_bindings.dart';
+import 'package:movie_app/modules/movies_by_genre/movies_by_genre_page.dart';
+import 'package:movie_app/modules/search_movies/search_movies_bindings.dart';
+import 'package:movie_app/modules/search_movies/search_movies_page.dart';
 import 'package:movie_app/modules/top_rated/top_rated_bindings.dart';
 import 'package:movie_app/modules/top_rated/top_rated_page.dart';
 
@@ -16,8 +20,20 @@ class AppRouters {
       binding: MovieDetailBindings(),
       page: () => const MovieDetailPage(),
     ),
+    GetPage(
+      name: SEARCH_MOVIES,
+      binding: SearchMoviesBindings(),
+      page: () => const SearchMoviesPage(),
+    ),
+    GetPage(
+      name: MOVIES_BY_GENRES,
+      binding: MoviesByGenreBindings(),
+      page: () => const MoviesByGenrePage(),
+    ),
   ];
 
   static const TOP_RATED = "/";
   static const MOVIE_DETAIL = "/detail";
+  static const SEARCH_MOVIES = "/search";
+  static const MOVIES_BY_GENRES = "/movies-by-genres";
 }

@@ -23,6 +23,14 @@ class MovieRepository {
     return response['results'].map<MovieModel>(MovieModel.fromMap).toList();
   }
 
+  Future<List<MovieModel>> findMoviesByGenre(int id, {int page = 1}) async {
+    final response = await _restClient.get('/discover/movie', params: {
+      'with_genres': id,
+      'page': page,
+    });
+    return response['results'].map<MovieModel>(MovieModel.fromMap).toList();
+  }
+
   Future<List<ActorModel>> findActorsOfWeek() async {
     final response = await _restClient.get('/trending/person/week');
     return response['results'].map<ActorModel>(ActorModel.fromMap).toList();

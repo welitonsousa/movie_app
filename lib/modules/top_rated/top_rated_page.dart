@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/core/ui/widgets/app_carousel.dart';
 import 'package:movie_app/core/ui/widgets/movie_card.dart';
+import 'package:movie_app/router/app_router.dart';
 import './top_rated_controller.dart';
 
 class TopRatedPage extends GetView<TopRatedController> {
@@ -28,6 +29,8 @@ class TopRatedPage extends GetView<TopRatedController> {
             images: controller.playingNow.map((e) => e.picture).toList(),
           ),
         ),
+        const SizedBox(height: 10),
+        FadeInRightBig(child: _genres),
         FadeInUpBig(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -45,6 +48,39 @@ class TopRatedPage extends GetView<TopRatedController> {
         ),
         _actorsComponent
       ],
+    );
+  }
+
+  Widget get _genres {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      height: 40,
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: controller.genres.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: ElevatedButton(
+                child: Text(controller.genres[index].name),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                      const Color.fromARGB(255, 67, 30, 170)),
+                ),
+                onPressed: () {
+                  Get.toNamed(
+                    AppRouters.MOVIES_BY_GENRES,
+                    arguments: controller.genres[index],
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
