@@ -31,6 +31,17 @@ class MovieRepository {
     return response['results'].map<MovieModel>(MovieModel.fromMap).toList();
   }
 
+  Future<List<MovieModel>> search(String word, {int page = 1}) async {
+    if (word.isNotEmpty) {
+      final response = await _restClient.get('/search/movie', params: {
+        'query': word,
+        'page': page,
+      });
+      return response['results'].map<MovieModel>(MovieModel.fromMap).toList();
+    }
+    return [];
+  }
+
   Future<List<ActorModel>> findActorsOfWeek() async {
     final response = await _restClient.get('/trending/person/week');
     return response['results'].map<ActorModel>(ActorModel.fromMap).toList();

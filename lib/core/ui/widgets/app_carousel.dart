@@ -6,9 +6,13 @@ class AppCarousel extends StatefulWidget {
   final List<String> images;
   final List<String>? labels;
   final double height;
-
+  final Function(int)? onClick;
   const AppCarousel(
-      {Key? key, required this.images, this.labels, this.height = 200})
+      {Key? key,
+      required this.images,
+      this.labels,
+      this.height = 200,
+      this.onClick})
       : super(key: key);
 
   @override
@@ -50,39 +54,46 @@ class _AppCarouselState extends State<AppCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: widget.height,
-      child: Stack(
-        children: [
-          PageView(
-            children: _images,
-            controller: pageController,
-            onPageChanged: (index) => imageIndex.value = index,
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: ValueListenableBuilder(
-              valueListenable: imageIndex,
-              builder: (_, index, __) => _imageIndication,
+    return GestureDetector(
+      onTap: () {
+        if (widget.onClick != null) {
+          widget.onClick!(imageIndex.value);
+        }
+      },
+      child: SizedBox(
+        height: widget.height,
+        child: Stack(
+          children: [
+            PageView(
+              children: _images,
+              controller: pageController,
+              onPageChanged: (index) => imageIndex.value = index,
             ),
-          ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: ValueListenableBuilder(
-              valueListenable: imageIndex,
-              builder: (_, int index, __) => Container(
-                padding: const EdgeInsets.only(left: 5),
-                child: Text(
-                  widget.labels?[index] ?? '',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                decoration: const BoxDecoration(boxShadow: [
-                  BoxShadow(color: Colors.black54, blurRadius: 10)
-                ]),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ValueListenableBuilder(
+                valueListenable: imageIndex,
+                builder: (_, index, __) => _imageIndication,
               ),
             ),
-          ),
-        ],
+            Align(
+              alignment: Alignment.topLeft,
+              child: ValueListenableBuilder(
+                valueListenable: imageIndex,
+                builder: (_, int index, __) => Container(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: Text(
+                    widget.labels?[index] ?? '',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  decoration: const BoxDecoration(boxShadow: [
+                    BoxShadow(color: Colors.black54, blurRadius: 10)
+                  ]),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

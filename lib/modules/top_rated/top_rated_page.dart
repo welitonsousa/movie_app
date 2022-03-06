@@ -11,9 +11,16 @@ class TopRatedPage extends GetView<TopRatedController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Movies')),
-      body: Obx(() => _body(context)),
+    return SafeArea(
+      child: Scaffold(
+        body: Obx(() => _body(context)),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.search),
+          onPressed: () {
+            Get.toNamed(AppRouters.SEARCH_MOVIES);
+          },
+        ),
+      ),
     );
   }
 
@@ -27,6 +34,10 @@ class TopRatedPage extends GetView<TopRatedController> {
           child: AppCarousel(
             labels: controller.playingNow.map((e) => e.title).toList(),
             images: controller.playingNow.map((e) => e.picture).toList(),
+            onClick: (index) {
+              Get.toNamed(AppRouters.MOVIE_DETAIL,
+                  arguments: controller.playingNow[index]);
+            },
           ),
         ),
         const SizedBox(height: 10),

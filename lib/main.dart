@@ -15,10 +15,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: ThemeData.dark().copyWith(
-        primaryColor: const Color(0xFF151C26),
-        appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF151C26)),
-        scaffoldBackgroundColor: const Color(0xFF151C26),
-      ),
+          primaryColor: const Color(0xFF151C26),
+          appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF151C26)),
+          scaffoldBackgroundColor: const Color(0xFF151C26),
+          platform: TargetPlatform.iOS),
       debugShowCheckedModeBanner: Env.DEBUG_MODE,
       initialBinding: AppBindings(),
       getPages: AppRouters().pages,
