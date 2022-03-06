@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/core/ui/widgets/app_carousel.dart';
@@ -21,18 +22,26 @@ class TopRatedPage extends GetView<TopRatedController> {
     }
     return ListView(
       children: [
-        AppCarousel(
-          labels: controller.playingNow.map((e) => e.title).toList(),
-          images: controller.playingNow.map((e) => e.picture).toList(),
+        FadeInDownBig(
+          child: AppCarousel(
+            labels: controller.playingNow.map((e) => e.title).toList(),
+            images: controller.playingNow.map((e) => e.picture).toList(),
+          ),
         ),
-        Wrap(
-          alignment: WrapAlignment.spaceAround,
-          children:
-              controller.topMovies.map((e) => AppMovieCard(movie: e)).toList(),
+        FadeInUpBig(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Wrap(
+              alignment: WrapAlignment.spaceAround,
+              children: controller.topMovies
+                  .map((e) => AppMovieCard(movie: e))
+                  .toList(),
+            ),
+          ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 3, top: 10),
-          child: Text(' Atores da Semana', style: context.textTheme.headline6),
+          padding: const EdgeInsets.only(left: 5, top: 10),
+          child: Text('Atores da Semana', style: context.textTheme.headline6),
         ),
         _actorsComponent
       ],

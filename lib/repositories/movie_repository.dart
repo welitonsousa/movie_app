@@ -1,5 +1,6 @@
 import 'package:movie_app/core/rest_client/rest_client.dart';
 import 'package:movie_app/models/actor_model.dart';
+import 'package:movie_app/models/credit_model.dart';
 import 'package:movie_app/models/genre_model.dart';
 import 'package:movie_app/models/movie_model.dart';
 
@@ -25,5 +26,19 @@ class MovieRepository {
   Future<List<ActorModel>> findActorsOfWeek() async {
     final response = await _restClient.get('/trending/person/week');
     return response['results'].map<ActorModel>(ActorModel.fromMap).toList();
+  }
+
+  Future<List<CreditModel>> credits(int movieId) async {
+    final response = await _restClient.get('/movie/$movieId/credits');
+    return response['cast'].map<CreditModel>(CreditModel.fromMap).toList();
+  }
+
+  Future<List<MovieModel>> similar(int movieId) async {
+    final response = await _restClient.get('/movie/$movieId/similar');
+    final res =
+        response['results'].map<MovieModel>(MovieModel.fromMap).toList();
+    res as List<MovieModel>;
+    res.removeWhere((element) => element.id == movieId);
+    return res;
   }
 }
