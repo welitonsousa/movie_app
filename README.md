@@ -1,15 +1,19 @@
 <p align="center">
     <img src="./assets/images/logo.png"/>
 </p>
-# Movie APP
 
-
+### Sobre
 Movie APP é um aplicativo que soluciona o problema de quem não consegue encontrar nada para assistir.
+
+Clique no botão abaixo para baixar o aplicativo
+<a href="https://github.com/welitonsousa/movie_app/raw/main/assets/download/app.apk" download>
+    <img src="./assets/images/download-button.png" width="200"/>
+</a>
 
 ### Desenvolvimento
 Este app foi desenvolvido afim de aprimoramento de conhecimentos de **arquitetura limpa**, levando em consideração o desempenho da aplicação e **clean code**. Além disso, esta aplicação foi desenvolvida utilizando as melhores praticas de controle de gestão de dependências
 
-<a href="https://github.com/welitonsousa/movie_app/raw/main/assets/download/app.apk" download>Baixar App</a>
+
 
 
 <h2 align="center">Demonstração</h2>
