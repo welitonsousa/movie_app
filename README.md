@@ -1,4 +1,8 @@
+<p align="center">
+    <img src="./assets/images/logo.png"/>
+</p>
 # Movie APP
+
 
 Movie APP é um aplicativo que soluciona o problema de quem não consegue encontrar nada para assistir.
 
@@ -12,6 +16,8 @@ Este app foi desenvolvido afim de aprimoramento de conhecimentos de **arquitetur
 <p align="center">
     <img src="./assets/demo/demo.gif" height="500"/>
 </p>
+
+
 
 <h2 align="center">Capturas de tela</h2>
 <p align="center">
