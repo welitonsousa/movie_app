@@ -1,11 +1,13 @@
 <p align="center">
-    <img src="./assets/images/logo.png"/>
+    <img src="./assets/images/logo.png" width="500"/>
 </p>
 
 ### Sobre
 Movie APP é um aplicativo que soluciona o problema de quem não consegue encontrar nada para assistir.
 
 Clique no botão abaixo para baixar o aplicativo
+<br>
+
 <a href="https://github.com/welitonsousa/movie_app/raw/main/assets/download/app.apk" download>
     <img src="./assets/images/download-button.png" width="200"/>
 </a>
@@ -18,7 +20,7 @@ Este app foi desenvolvido afim de aprimoramento de conhecimentos de **arquitetur
 
 <h2 align="center">Demonstração</h2>
 <p align="center">
-    <img src="./assets/demo/demo.gif" height="500"/>
+    <img src="./assets/demo/demo.gif"/>
 </p>
 
 
