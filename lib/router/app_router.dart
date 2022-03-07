@@ -1,4 +1,6 @@
 import 'package:get/route_manager.dart';
+import 'package:movie_app/modules/favorites/favorites_bindings.dart';
+import 'package:movie_app/modules/favorites/favorites_page.dart';
 import 'package:movie_app/modules/movie_detail/movie_detail_bindings.dart';
 import 'package:movie_app/modules/movie_detail/movie_detail_page.dart';
 import 'package:movie_app/modules/movies_by_genre/movies_by_genre_bindings.dart';
@@ -30,10 +32,16 @@ class AppRouters {
       binding: MoviesByGenreBindings(),
       page: () => const MoviesByGenrePage(),
     ),
+    GetPage(
+      name: MOVIES_FAVORITES,
+      binding: FavoritesBindings(),
+      page: () => const FavoritesPage(),
+    ),
   ];
 
   static const TOP_RATED = "/";
   static const MOVIE_DETAIL = "/detail";
   static const SEARCH_MOVIES = "/search";
   static const MOVIES_BY_GENRES = "/movies-by-genres";
+  static const MOVIES_FAVORITES = "/favorites";
 }

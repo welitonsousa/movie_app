@@ -37,6 +37,7 @@ dependencies:
   get: ^4.6.1
   dio: ^4.0.4
   animate_do: ^2.1.0
+  get_storage: ^2.0.3
 
 dev_dependencies:
   flutter_test:

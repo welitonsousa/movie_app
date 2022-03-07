@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:movie_app/core/ui/widgets/app_rating.dart';
 import 'package:movie_app/core/ui/widgets/movie_card.dart';
 import 'package:movie_app/models/movie_model.dart';
+import 'package:movie_app/modules/favorites/favorites_controller.dart';
 import './movie_detail_controller.dart';
 
 class MovieDetailPage extends StatefulWidget {
@@ -15,7 +16,7 @@ class MovieDetailPage extends StatefulWidget {
 
 class _MovieDetailPageState extends State<MovieDetailPage> {
   late MovieDetailController controller;
-
+  final favoriteController = Get.find<FavoritesController>();
   @override
   void initState() {
     final movie = Rx<MovieModel>(Get.arguments);
@@ -29,7 +30,21 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(controller.movie.title)),
+      appBar: AppBar(
+        title: Text(controller.movie.title),
+        actions: [
+          Obx(() {
+            return IconButton(
+              icon: favoriteController.isFavorite(controller.movie)
+                  ? Pulse(child: const Icon(Icons.favorite))
+                  : Pulse(child: const Icon(Icons.favorite_border)),
+              onPressed: () {
+                favoriteController.addMovie(controller.movie);
+              },
+            );
+          })
+        ],
+      ),
       body: _body(context),
     );
   }

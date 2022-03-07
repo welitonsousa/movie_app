@@ -33,4 +33,16 @@ class MovieModel {
       average: map['vote_average']?.toDouble() ?? 0.0,
     );
   }
+
+  toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'overview': description,
+      'poster_path': poster.replaceAll(Env.IMAGE_BASE, ''),
+      'backdrop_path': picture.replaceAll(Env.IMAGE_BASE, ''),
+      'vote_count': countAverage,
+      'vote_average': average,
+    };
+  }
 }

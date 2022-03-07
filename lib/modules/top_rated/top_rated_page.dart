@@ -67,30 +67,51 @@ class TopRatedPage extends GetView<TopRatedController> {
       margin: const EdgeInsets.symmetric(horizontal: 10),
       height: 40,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
-      child: ListView.builder(
+      child: ListView(
         scrollDirection: Axis.horizontal,
-        itemCount: controller.genres.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: ElevatedButton(
-                child: Text(controller.genres[index].name),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                      const Color.fromARGB(255, 67, 30, 170)),
-                ),
-                onPressed: () {
-                  Get.toNamed(
+        children: [
+          _buttonGenre(
+              child: const Icon(Icons.favorite_border),
+              color: const Color.fromARGB(255, 50, 9, 100),
+              action: () => Get.toNamed(AppRouters.MOVIES_FAVORITES)),
+          ...List.generate(
+            controller.genres.length,
+            (index) => _buttonGenre(
+              child: Text(controller.genres[index].name),
+              action: () {
+                Get.toNamed(
+                  AppRouters.MOVIES_BY_GENRES,
+                  arguments: Get.toNamed(
                     AppRouters.MOVIES_BY_GENRES,
                     arguments: controller.genres[index],
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
-          );
-        },
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buttonGenre({
+    required Widget child,
+    required Function action,
+    Color color = const Color.fromARGB(255, 67, 30, 170),
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 10),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(100),
+        child: ElevatedButton(
+          child: child,
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(color),
+          ),
+          onPressed: () {
+            action();
+          },
+        ),
       ),
     );
   }
