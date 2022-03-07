@@ -5,7 +5,7 @@ import 'package:movie_app/env.dart';
 class DioClient extends RestClient {
   final _dio = Dio(BaseOptions(
     baseUrl: Env.BASE_URL,
-    receiveTimeout: Env.TIME_OUT_MILLISECONDS,
+    connectTimeout: Env.TIME_OUT_MILLISECONDS,
     queryParameters: {'api_key': Env.API_KEY, 'language': 'pt-BR'},
   ));
 
