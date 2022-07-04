@@ -53,9 +53,8 @@ class MovieRepository {
   }
 
   Future<List<MovieModel>> similar(int movieId) async {
-    final response = await _restClient.get('/movie/$movieId/similar');
-    final res =
-        response['results'].map<MovieModel>(MovieModel.fromMap).toList();
+    var response = await _restClient.get('/movie/$movieId/similar');
+    var res = response['results'].map<MovieModel>(MovieModel.fromMap).toList();
     res as List<MovieModel>;
     res.removeWhere((element) => element.id == movieId);
     return res;

@@ -13,7 +13,9 @@ class ActorModel {
   factory ActorModel.fromMap(map) {
     return ActorModel(
       name: map['name'] ?? '',
-      picture: Env.IMAGE_BASE + map['profile_path'],
+      picture: map['profile_path'] != null
+          ? Env.IMAGE_BASE + map['profile_path']
+          : Env.IMAGE_AVATAR,
       id: map['id']?.toInt() ?? 0,
     );
   }
