@@ -12,4 +12,13 @@ class GenreModel {
       name: map['name'] ?? '',
     );
   }
+
+  Map<String, dynamic> toMap() {
+    final result = <String, dynamic>{};
+
+    result.addAll({'id': id});
+    result.addAll({'name': name});
+
+    return result;
+  }
 }

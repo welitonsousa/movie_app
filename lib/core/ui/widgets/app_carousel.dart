@@ -126,6 +126,12 @@ class _AppCarouselState extends State<AppCarousel> {
         imageUrl: element,
         width: double.maxFinite,
         fit: BoxFit.cover,
+        errorWidget: (c, s, d) => const Center(
+          child: Text(
+            "Não foi possível carregar esta imagem",
+            textAlign: TextAlign.center,
+          ),
+        ),
         progressIndicatorBuilder: (_, child, loading) {
           return SizedBox(
             height: 30,

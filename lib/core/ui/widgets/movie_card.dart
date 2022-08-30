@@ -38,6 +38,12 @@ class _AppMovieCardState extends State<AppMovieCard> {
                   imageUrl: widget.movie.poster,
                   height: 210,
                   width: widget.size,
+                  errorWidget: (c, s, d) => const Center(
+                    child: Text(
+                      "Não foi possível carregar esta imagem",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
               ),
             ),

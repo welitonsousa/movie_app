@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:movie_app/models/actor_model.dart';
 import 'package:movie_app/models/genre_model.dart';
 import 'package:movie_app/models/movie_model.dart';
@@ -6,7 +7,7 @@ import 'package:movie_app/repositories/movie_repository.dart';
 
 class TopRatedController extends GetxController {
   final MovieRepository _moviesRepository;
-
+  final _storage = GetStorage();
   TopRatedController({
     required MovieRepository movieRepository,
   }) : _moviesRepository = movieRepository;
@@ -26,13 +27,32 @@ class TopRatedController extends GetxController {
   bool get loading => _loading.value;
 
   Future<void> findPlayingNow() async {
-    final res = await _moviesRepository.findPlayingNow();
-    _playingNow.assignAll(res);
+    try {
+      final res = await _moviesRepository.findPlayingNow();
+
+      _playingNow.assignAll(res);
+      _storage.write(
+          'playing-movies', _topMovies.map((e) => e.toJson()).toList());
+    } catch (e) {
+      final movies = _storage.read('playing-movies');
+      if (_playingNow.isEmpty) {
+        _playingNow
+            .assignAll(movies.map<MovieModel>(MovieModel.fromMap).toList());
+      }
+    }
   }
 
   Future<void> findTopMovies() async {
-    final res = await _moviesRepository.findTopMovies(page: _page.value);
-    _topMovies.value = [..._topMovies, ...res];
+    try {
+      final res = await _moviesRepository.findTopMovies(page: _page.value);
+      _topMovies.value = [..._topMovies, ...res];
+      _storage.write('top-movies', _topMovies.map((e) => e.toJson()).toList());
+    } catch (e) {
+      final top = _storage.read('top-movies');
+      if (_topMovies.isEmpty) {
+        _topMovies.assignAll(top.map<MovieModel>(MovieModel.fromMap).toList());
+      }
+    }
   }
 
   Future<void> findActorsOfWeek() async {
@@ -41,8 +61,14 @@ class TopRatedController extends GetxController {
   }
 
   Future<void> findAllGenres() async {
-    final res = await _moviesRepository.findAllGenre();
-    _genres.assignAll(res);
+    final local = _storage.read('genres');
+    if (local == null) {
+      final res = await _moviesRepository.findAllGenre();
+      await _storage.write('genres', res.map((e) => e.toMap()).toList());
+      _genres.assignAll(res);
+    } else {
+      _genres.assignAll(local.map<GenreModel>(GenreModel.fromMap).toList());
+    }
   }
 
   Future<void> getNextMovies(int index) async {

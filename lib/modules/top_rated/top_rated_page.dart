@@ -37,7 +37,7 @@ class TopRatedPage extends GetView<TopRatedController> {
     return Column(
       children: [
         Visibility(
-          visible: context.height >= 500,
+          visible: context.height >= 700,
           child: FadeInDownBig(
             child: Padding(
               padding: const EdgeInsets.all(10),
@@ -56,7 +56,6 @@ class TopRatedPage extends GetView<TopRatedController> {
             ),
           ),
         ),
-        const SizedBox(height: 10),
         FadeInRightBig(child: _genres),
         const SizedBox(height: 10),
         Expanded(

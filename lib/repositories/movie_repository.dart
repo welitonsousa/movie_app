@@ -9,6 +9,7 @@ class MovieRepository {
   MovieRepository({required RestClient restClient}) : _restClient = restClient;
 
   Future<List<GenreModel>> findAllGenre() async {
+    print("genre request");
     final response = await _restClient.get('/genre/movie/list');
     return response['genres'].map<GenreModel>(GenreModel.fromMap).toList();
   }
