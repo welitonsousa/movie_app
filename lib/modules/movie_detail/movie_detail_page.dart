@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/core/ui/widgets/app_rating.dart';
@@ -17,6 +18,7 @@ class MovieDetailPage extends StatefulWidget {
 class _MovieDetailPageState extends State<MovieDetailPage> {
   late MovieDetailController controller;
   final favoriteController = Get.find<FavoritesController>();
+
   @override
   void initState() {
     final movie = Rx<MovieModel>(Get.arguments);
@@ -54,8 +56,8 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
       children: [
         Hero(
           tag: controller.movie.poster,
-          child: Image.network(
-            controller.movie.poster,
+          child: CachedNetworkImage(
+            imageUrl: controller.movie.poster,
             height: context.heightTransformer(reducedBy: 25),
             alignment: Alignment.topCenter,
             fit: BoxFit.cover,
@@ -131,12 +133,15 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
 
   Widget similares() {
     return SizedBox(
-      height: 350,
+      height: 300,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: List.generate(
           controller.moviesSimilares.length,
-          (index) => AppMovieCard(movie: controller.moviesSimilares[index]),
+          (index) => Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: AppMovieCard(movie: controller.moviesSimilares[index]),
+          ),
         ),
       ),
     );

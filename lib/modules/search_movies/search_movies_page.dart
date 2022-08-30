@@ -11,6 +11,7 @@ class SearchMoviesPage extends GetView<SearchMoviesController> {
     return Scaffold(
       appBar: AppBar(
         leading: const SizedBox(),
+        elevation: 0,
         actions: [
           IconButton(
             icon: const Icon(Icons.arrow_back_ios_rounded),
@@ -29,18 +30,18 @@ class SearchMoviesPage extends GetView<SearchMoviesController> {
           ),
         ],
       ),
-      body: Obx(_body),
+      body: Obx(() => _body(context)),
     );
   }
 
-  Widget _body() {
+  Widget _body(BuildContext context) {
     if (controller.loading) {
       return const Center(child: CircularProgressIndicator());
     }
     return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisExtent: 330,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: context.width ~/ 140,
+        mainAxisExtent: 265,
       ),
       itemCount: controller.movies.length,
       itemBuilder: (context, index) {

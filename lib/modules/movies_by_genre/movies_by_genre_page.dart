@@ -9,7 +9,10 @@ class MoviesByGenrePage extends GetView<MoviesByGenreController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(controller.genre.name)),
+      appBar: AppBar(
+        title: Text(controller.genre.name),
+        elevation: 0,
+      ),
       body: Obx(_body),
     );
   }

@@ -23,7 +23,7 @@ class AppRating extends StatelessWidget {
     for (int index = 1; index <= quantityStars; index++) {
       list.add(Icon(
         Icons.star,
-        size: 18,
+        size: 14,
         color: index <= ((value / (maxValue / quantityStars))).round()
             ? Colors.yellow
             : null,

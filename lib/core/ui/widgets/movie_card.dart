@@ -1,12 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:movie_app/core/ui/widgets/app_rating.dart';
 import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/router/app_router.dart';
 
+import 'app_rating.dart';
+
 class AppMovieCard extends StatefulWidget {
   final MovieModel movie;
-  const AppMovieCard({Key? key, required this.movie}) : super(key: key);
+  final double size;
+  const AppMovieCard({Key? key, required this.movie, this.size = 140})
+      : super(key: key);
 
   @override
   State<AppMovieCard> createState() => _AppMovieCardState();
@@ -21,35 +25,49 @@ class _AppMovieCardState extends State<AppMovieCard> {
         arguments: widget.movie,
         preventDuplicates: false,
       ),
-      child: Container(
-        padding: const EdgeInsets.only(top: 20, left: 5, right: 5, bottom: 10),
-        width: context.widthTransformer(dividedBy: 2.1),
+      child: SizedBox(
+        width: widget.size,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Hero(
                 tag: widget.movie.poster,
-                child: Image.network(widget.movie.poster, height: 250),
+                child: CachedNetworkImage(
+                  imageUrl: widget.movie.poster,
+                  height: 210,
+                  width: widget.size,
+                ),
               ),
             ),
-            const SizedBox(height: 10),
-            Text(
-              widget.movie.title,
-              textAlign: TextAlign.left,
-              maxLines: 1,
+            SizedBox(
+              width: widget.size,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.movie.title,
+                    textAlign: TextAlign.left,
+                    maxLines: 1,
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 30,
+                        child: Text(
+                          widget.movie.average.toString(),
+                          maxLines: 1,
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      AppRating(value: widget.movie.average)
+                    ],
+                  ),
+                ],
+              ),
             ),
-            Row(
-              children: [
-                Text(
-                  widget.movie.average.toString(),
-                  textAlign: TextAlign.left,
-                ),
-                const SizedBox(width: 10),
-                AppRating(value: widget.movie.average)
-              ],
-            )
           ],
         ),
       ),

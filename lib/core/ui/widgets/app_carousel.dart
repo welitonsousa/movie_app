@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class AppCarousel extends StatefulWidget {
@@ -33,12 +34,10 @@ class _AppCarouselState extends State<AppCarousel> {
             curve: Curves.linear,
           );
         } else {
-          timer.cancel();
-          pageController.animateToPage(
-            0,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.linear,
-          );
+          // timer.cancel();
+          pageController.animateTo(0,
+              duration: const Duration(milliseconds: 2000),
+              curve: Curves.linear);
         }
       }
     });
@@ -123,13 +122,17 @@ class _AppCarouselState extends State<AppCarousel> {
   List<Widget> get _images {
     final list = <Widget>[];
     for (var element in widget.images) {
-      list.add(Image.network(
-        element,
+      list.add(CachedNetworkImage(
+        imageUrl: element,
         width: double.maxFinite,
         fit: BoxFit.cover,
-        loadingBuilder: (_, child, loading) {
-          if (loading == null) return child;
-          return const Center(child: CircularProgressIndicator());
+        progressIndicatorBuilder: (_, child, loading) {
+          return SizedBox(
+            height: 30,
+            width: 30,
+            child: Center(
+                child: CircularProgressIndicator(value: loading.progress)),
+          );
         },
       ));
     }

@@ -11,6 +11,7 @@ class FavoritesPage extends GetView<FavoritesController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Favoritos'),
+        elevation: 0,
       ),
       body: Obx(() {
         if (controller.movies.isEmpty) {

@@ -16,6 +16,8 @@ class TopRatedController extends GetxController {
   final _topMovies = <MovieModel>[].obs;
   final _actors = <ActorModel>[].obs;
   final _loading = false.obs;
+  final _page = 1.obs;
+  final _loadingNextPage = false.obs;
 
   List<MovieModel> get playingNow => [..._playingNow.sublist(0, 10)];
   List<MovieModel> get topMovies => [..._topMovies];
@@ -29,18 +31,27 @@ class TopRatedController extends GetxController {
   }
 
   Future<void> findTopMovies() async {
-    final res = await _moviesRepository.findTopMovies();
-    _topMovies.assignAll(res);
+    final res = await _moviesRepository.findTopMovies(page: _page.value);
+    _topMovies.value = [..._topMovies, ...res];
   }
 
   Future<void> findActorsOfWeek() async {
-    final res = await _moviesRepository.findActorsOfWeek();
-    _actors.assignAll(res);
+    // final res = await _moviesRepository.findActorsOfWeek();
+    // _actors.assignAll(res);
   }
 
   Future<void> findAllGenres() async {
     final res = await _moviesRepository.findAllGenre();
     _genres.assignAll(res);
+  }
+
+  Future<void> getNextMovies(int index) async {
+    if (index == _topMovies.length - 10) {
+      if (!_loadingNextPage.value) {
+        _page.value += 1;
+        await findTopMovies();
+      }
+    }
   }
 
   @override

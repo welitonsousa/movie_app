@@ -7,7 +7,6 @@ class AppBindings extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<RestClient>(() => DioClient());
-    // Get.lazyPut(() => FavoritesController());
     Get.put(FavoritesController());
   }
 }
