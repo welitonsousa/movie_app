@@ -9,6 +9,8 @@ import 'package:movie_app/modules/search_movies/search_movies_bindings.dart';
 import 'package:movie_app/modules/search_movies/search_movies_page.dart';
 import 'package:movie_app/modules/top_rated/top_rated_bindings.dart';
 import 'package:movie_app/modules/top_rated/top_rated_page.dart';
+import 'package:movie_app/modules/video/video_bindings.dart';
+import 'package:movie_app/modules/video/video_page.dart';
 
 class AppRouters {
   final pages = <GetPage>[
@@ -37,9 +39,15 @@ class AppRouters {
       binding: FavoritesBindings(),
       page: () => const FavoritesPage(),
     ),
+    GetPage(
+      name: DETAIL_VIDEO,
+      binding: VideoBindings(),
+      page: () => const VideoPage(),
+    ),
   ];
 
   static const TOP_RATED = "/";
+  static const DETAIL_VIDEO = "/detail/video";
   static const MOVIE_DETAIL = "/detail";
   static const SEARCH_MOVIES = "/search";
   static const MOVIES_BY_GENRES = "/movies-by-genres";

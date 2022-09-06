@@ -3,6 +3,8 @@ import 'package:movie_app/models/actor_model.dart';
 import 'package:movie_app/models/credit_model.dart';
 import 'package:movie_app/models/genre_model.dart';
 import 'package:movie_app/models/movie_model.dart';
+import 'package:movie_app/models/provider_model.dart';
+import 'package:movie_app/models/video_model.dart';
 
 class MovieRepository {
   final RestClient _restClient;
@@ -16,6 +18,37 @@ class MovieRepository {
   Future<List<MovieModel>> findPlayingNow() async {
     final response = await _restClient.get('/movie/now_playing');
     return response['results'].map<MovieModel>(MovieModel.fromMap).toList();
+  }
+
+  Future<List<VideoModel>> findVideos(int id) async {
+    final response = await _restClient.get('/movie/$id/videos');
+    var res = response['results'].map<VideoModel>(VideoModel.fromMap).toList();
+    res as List<VideoModel>;
+    res.removeWhere((e) => e.platform != 'YouTube');
+    return res;
+  }
+
+  Future<List<ProviderModel>> findMovieProviders(int id) async {
+    final res = <ProviderModel>[];
+    final response = await _restClient.get('/movie/$id/watch/providers');
+    final languages = ['BR', 'US', 'PT', 'CA', 'ES'];
+    final payments = ['buy', 'flatrate'];
+
+    for (var language in languages) {
+      for (var payment in payments) {
+        var providers = (response['results']?[language]?[payment] ?? [])
+            .map<ProviderModel>(ProviderModel.fromMap)
+            .toList() as List<ProviderModel>;
+
+        for (var e in providers) {
+          if (res.indexWhere((p) => p.name == e.name) == -1) {
+            res.add(e);
+          }
+        }
+      }
+    }
+    res.sort((a, b) => a.priority < b.priority ? 0 : 1);
+    return res;
   }
 
   Future<List<MovieModel>> findTopMovies({int page = 1}) async {

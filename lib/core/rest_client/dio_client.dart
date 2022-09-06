@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:movie_app/core/rest_client/rest_client.dart';
 import 'package:movie_app/env.dart';
@@ -12,6 +14,7 @@ class DioClient extends RestClient {
   @override
   Future<Map<String, dynamic>> get(String path,
       {Map<String, dynamic>? params}) async {
+    log(path);
     final response = await _dio.get(path, queryParameters: params);
     return response.data;
   }

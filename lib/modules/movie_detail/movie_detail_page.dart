@@ -6,6 +6,7 @@ import 'package:movie_app/core/ui/widgets/app_rating.dart';
 import 'package:movie_app/core/ui/widgets/movie_card.dart';
 import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/modules/favorites/favorites_controller.dart';
+import 'package:movie_app/router/app_router.dart';
 import './movie_detail_controller.dart';
 
 class MovieDetailPage extends StatefulWidget {
@@ -34,6 +35,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(controller.movie.title),
+        elevation: 0,
         actions: [
           Obx(() {
             return IconButton(
@@ -56,11 +58,15 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
       children: [
         Hero(
           tag: controller.movie.poster,
-          child: CachedNetworkImage(
-            imageUrl: controller.movie.poster,
-            height: context.heightTransformer(reducedBy: 25),
-            alignment: Alignment.topCenter,
-            fit: BoxFit.cover,
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 233),
+            child: CachedNetworkImage(
+              imageUrl: controller.movie.picture,
+              width: double.infinity,
+              // height: context.heightTransformer(reducedBy: 30),
+              // alignment: Alignment.topCenter,
+              fit: BoxFit.fitHeight,
+            ),
           ),
         ),
         Padding(
@@ -76,17 +82,30 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
               Text(
                 controller.movie.description,
                 style: context.textTheme.bodyText1,
+                textAlign: TextAlign.justify,
               ),
               const SizedBox(height: 20),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    controller.movie.average.toString(),
-                    style: context.textTheme.bodyText1,
+                  Row(
+                    children: [
+                      Text(
+                        controller.movie.average.toString(),
+                        style: context.textTheme.bodyText1,
+                      ),
+                      const SizedBox(width: 10),
+                      FadeInRightBig(
+                        child: AppRating(value: controller.movie.average),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 10),
-                  FadeInRightBig(
-                    child: AppRating(value: controller.movie.average),
+                  ElevatedButton(
+                    child: const Text("Assistir trailers"),
+                    onPressed: () => Get.toNamed(
+                      AppRouters.DETAIL_VIDEO,
+                      arguments: controller.movie,
+                    ),
                   ),
                 ],
               ),
@@ -94,12 +113,36 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                 '${controller.movie.countAverage} Pessoas votaram',
                 style: context.textTheme.bodyText1,
               ),
-              Obx(credits),
+              const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              Obx(
+                () => Wrap(
+                  runAlignment: WrapAlignment.center,
+                  runSpacing: 10,
+                  spacing: 10,
+                  children: [
+                    Row(children: const [Text('Onde Assistir:')]),
+                    ...controller.providers
+                        .map((e) => Tooltip(
+                              message: e.name,
+                              child: SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: CachedNetworkImage(imageUrl: e.logo),
+                              ),
+                            ))
+                        .toList()
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
               Text(
                 'Filmes semelhantes',
                 style: context.textTheme.headline6,
               ),
+              const SizedBox(height: 5),
               Obx(similares),
+              Obx(credits),
             ],
           ),
         )

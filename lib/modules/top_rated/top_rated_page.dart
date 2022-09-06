@@ -41,16 +41,23 @@ class TopRatedPage extends GetView<TopRatedController> {
           child: FadeInDownBig(
             child: Padding(
               padding: const EdgeInsets.all(10),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: AppCarousel(
-                  labels: controller.playingNow.map((e) => e.title).toList(),
-                  images: controller.playingNow.map((e) => e.picture).toList(),
-                  height: 300,
-                  onClick: (index) {
-                    Get.toNamed(AppRouters.MOVIE_DETAIL,
-                        arguments: controller.playingNow[index]);
-                  },
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 1000),
+                child: Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: AppCarousel(
+                      labels:
+                          controller.playingNow.map((e) => e.title).toList(),
+                      images:
+                          controller.playingNow.map((e) => e.picture).toList(),
+                      height: 300,
+                      onClick: (index) {
+                        Get.toNamed(AppRouters.MOVIE_DETAIL,
+                            arguments: controller.playingNow[index]);
+                      },
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -66,6 +73,7 @@ class TopRatedPage extends GetView<TopRatedController> {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: context.width ~/ 140,
                 mainAxisSpacing: 5.0,
+                crossAxisSpacing: 10,
                 mainAxisExtent: 265,
               ),
               itemBuilder: (c, index) {

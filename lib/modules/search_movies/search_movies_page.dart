@@ -38,6 +38,11 @@ class SearchMoviesPage extends GetView<SearchMoviesController> {
     if (controller.loading) {
       return const Center(child: CircularProgressIndicator());
     }
+    if (controller.movies.isEmpty) {
+      return const Center(
+        child: Text("Comece a pesquisar"),
+      );
+    }
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: context.width ~/ 140,

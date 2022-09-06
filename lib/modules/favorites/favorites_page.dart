@@ -9,27 +9,31 @@ class FavoritesPage extends GetView<FavoritesController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Favoritos'),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('Favoritos'), elevation: 0),
       body: Obx(() {
         if (controller.movies.isEmpty) {
           return Center(
-            child: Text(
-              'Lista vazia',
-              style: context.textTheme.headline5,
-            ),
+            child: Text('Lista vazia', style: context.textTheme.headline5),
           );
         }
         return GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisExtent: 330,
-          ),
+          shrinkWrap: true,
           itemCount: controller.movies.length,
-          itemBuilder: (context, index) {
-            return Center(child: AppMovieCard(movie: controller.movies[index]));
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: context.width ~/ 140,
+            mainAxisSpacing: 5.0,
+            crossAxisSpacing: 10,
+            mainAxisExtent: 265,
+          ),
+          itemBuilder: (c, index) {
+            return Center(
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 140),
+                child: Center(
+                  child: AppMovieCard(movie: controller.movies[index]),
+                ),
+              ),
+            );
           },
         );
       }),

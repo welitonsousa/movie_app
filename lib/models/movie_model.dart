@@ -25,7 +25,7 @@ class MovieModel {
       poster: map['poster_path'] != null
           ? Env.IMAGE_BASE + map['poster_path']
           : Env.IMAGE_AVATAR,
-      picture: map['backdrop_path'] != null
+      picture: map?['backdrop_path'] != null
           ? Env.IMAGE_BASE + map['backdrop_path']
           : Env.IMAGE_AVATAR,
       id: map['id']?.toInt() ?? 0,

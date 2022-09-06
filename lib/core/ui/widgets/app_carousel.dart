@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +12,7 @@ class AppCarousel extends StatefulWidget {
       {Key? key,
       required this.images,
       this.labels,
-      this.height = 200,
+      this.height = 225,
       this.onClick})
       : super(key: key);
 
@@ -63,10 +63,17 @@ class _AppCarouselState extends State<AppCarousel> {
         height: widget.height,
         child: Stack(
           children: [
-            PageView(
-              children: _images,
-              controller: pageController,
-              onPageChanged: (index) => imageIndex.value = index,
+            Align(
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                width: context.width,
+                height: widget.height,
+                child: PageView(
+                  children: _images,
+                  controller: pageController,
+                  onPageChanged: (index) => imageIndex.value = index,
+                ),
+              ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -85,9 +92,9 @@ class _AppCarouselState extends State<AppCarousel> {
                     widget.labels?[index] ?? '',
                     style: Theme.of(context).textTheme.headline6,
                   ),
-                  decoration: const BoxDecoration(boxShadow: [
-                    BoxShadow(color: Colors.black54, blurRadius: 10)
-                  ]),
+                  // decoration: const BoxDecoration(boxShadow: [
+                  //   BoxShadow(color: Colors.black54, blurRadius: 10)
+                  // ]),
                 ),
               ),
             ),
@@ -124,8 +131,7 @@ class _AppCarouselState extends State<AppCarousel> {
     for (var element in widget.images) {
       list.add(CachedNetworkImage(
         imageUrl: element,
-        width: double.maxFinite,
-        fit: BoxFit.cover,
+        width: context.width,
         errorWidget: (c, s, d) => const Center(
           child: Text(
             "Não foi possível carregar esta imagem",
