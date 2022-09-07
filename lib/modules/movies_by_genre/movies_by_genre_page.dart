@@ -24,7 +24,8 @@ class MoviesByGenrePage extends GetView<MoviesByGenreController> {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        mainAxisExtent: 330,
+        mainAxisExtent: 265,
+        crossAxisSpacing: 10,
       ),
       itemCount: controller.movies.length,
       itemBuilder: (context, index) {

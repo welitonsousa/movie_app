@@ -17,23 +17,14 @@ class FavoritesPage extends GetView<FavoritesController> {
           );
         }
         return GridView.builder(
-          shrinkWrap: true,
           itemCount: controller.movies.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: context.width ~/ 140,
-            mainAxisSpacing: 5.0,
-            crossAxisSpacing: 10,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
             mainAxisExtent: 265,
+            crossAxisSpacing: 10,
           ),
           itemBuilder: (c, index) {
-            return Center(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 140),
-                child: Center(
-                  child: AppMovieCard(movie: controller.movies[index]),
-                ),
-              ),
-            );
+            return AppMovieCard(movie: controller.movies[index]);
           },
         );
       }),

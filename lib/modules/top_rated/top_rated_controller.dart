@@ -20,7 +20,7 @@ class TopRatedController extends GetxController {
   final _page = 1.obs;
   final _loadingNextPage = false.obs;
 
-  List<MovieModel> get playingNow => [..._playingNow.sublist(0, 10)];
+  List<MovieModel> get playingNow => [..._playingNow];
   List<MovieModel> get topMovies => [..._topMovies];
   List<GenreModel> get genres => [..._genres];
   List<ActorModel> get actors => [..._actors];

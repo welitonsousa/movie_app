@@ -14,7 +14,6 @@ class TopRatedPage extends GetView<TopRatedController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Movie App"),
-        elevation: 0,
         actions: [
           _buttonGenre(
               child: const Icon(Icons.favorite_border),
@@ -22,75 +21,75 @@ class TopRatedPage extends GetView<TopRatedController> {
               action: () => Get.toNamed(AppRouters.MOVIES_FAVORITES))
         ],
       ),
-      body: Obx(() => _body(context)),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.search),
         onPressed: () => Get.toNamed(AppRouters.SEARCH_MOVIES),
       ),
-    );
-  }
-
-  Widget _body(BuildContext context) {
-    if (controller.loading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    return Column(
-      children: [
-        Visibility(
-          visible: context.height >= 700,
-          child: FadeInDownBig(
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 1000),
-                child: Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: AppCarousel(
-                      labels:
-                          controller.playingNow.map((e) => e.title).toList(),
-                      images:
-                          controller.playingNow.map((e) => e.picture).toList(),
-                      height: 300,
-                      onClick: (index) {
-                        Get.toNamed(AppRouters.MOVIE_DETAIL,
-                            arguments: controller.playingNow[index]);
-                      },
-                    ),
-                  ),
+      body: Obx(
+        () => CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              expandedHeight: 250,
+              flexibleSpace: FlexibleSpaceBar(
+                background: carousel(context),
+              ),
+            ),
+            SliverAppBar(
+              expandedHeight: 50,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: FadeInRightBig(child: _genres),
                 ),
               ),
             ),
-          ),
-        ),
-        FadeInRightBig(child: _genres),
-        const SizedBox(height: 10),
-        Expanded(
-          child: FadeInUpBig(
-            child: GridView.builder(
-              shrinkWrap: true,
-              itemCount: controller.topMovies.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: context.width ~/ 140,
-                mainAxisSpacing: 5.0,
-                crossAxisSpacing: 10,
+            SliverGrid(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 260,
                 mainAxisExtent: 265,
+                crossAxisSpacing: 10,
               ),
-              itemBuilder: (c, index) {
-                controller.getNextMovies(index);
-                return Center(
-                  child: Container(
-                    constraints: const BoxConstraints(maxWidth: 140),
-                    child: Center(
-                      child: AppMovieCard(movie: controller.topMovies[index]),
-                    ),
-                  ),
-                );
-              },
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  controller.getNextMovies(index);
+                  return AppMovieCard(
+                    movie: controller.topMovies[index],
+                    // size: 260,
+                  );
+                },
+                childCount: controller.topMovies.length,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget carousel(BuildContext context) {
+    if (context.height <= 700 || controller.playingNow.isEmpty) {
+      return const SizedBox();
+    }
+    return FadeInDownBig(
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: AppCarousel(
+                labels: controller.playingNow.map((e) => e.title).toList(),
+                images: controller.playingNow.map((e) => e.picture).toList(),
+                onClick: (index) {
+                  Get.toNamed(AppRouters.MOVIE_DETAIL,
+                      arguments: controller.playingNow[index]);
+                },
+              ),
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 

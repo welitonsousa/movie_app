@@ -47,9 +47,11 @@ class VideoController extends GetxController {
 
   @override
   void onClose() {
-    closeAllYoutubeControllers();
+    if (Get.context!.orientation == Orientation.landscape) {
+      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    }
     scrollController.dispose();
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    closeAllYoutubeControllers();
     super.onClose();
   }
 }

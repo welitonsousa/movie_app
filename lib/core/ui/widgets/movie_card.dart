@@ -9,7 +9,7 @@ import 'app_rating.dart';
 class AppMovieCard extends StatefulWidget {
   final MovieModel movie;
   final double size;
-  const AppMovieCard({Key? key, required this.movie, this.size = 140})
+  const AppMovieCard({Key? key, required this.movie, this.size = 180})
       : super(key: key);
 
   @override
@@ -37,6 +37,7 @@ class _AppMovieCardState extends State<AppMovieCard> {
                 child: CachedNetworkImage(
                   imageUrl: widget.movie.poster,
                   height: 210,
+                  fit: BoxFit.cover,
                   width: widget.size,
                   errorWidget: (c, s, d) => const Center(
                     child: Text(
@@ -52,6 +53,7 @@ class _AppMovieCardState extends State<AppMovieCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 6),
                   Text(
                     widget.movie.title,
                     textAlign: TextAlign.left,
