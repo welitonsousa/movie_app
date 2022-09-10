@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:movie_app/core/utils/scroll_velocity.dart';
 import 'package:movie_app/models/actor_model.dart';
 import 'package:movie_app/models/genre_model.dart';
 import 'package:movie_app/models/movie_model.dart';
@@ -19,6 +20,7 @@ class TopRatedController extends GetxController {
   final _loading = false.obs;
   final _page = 1.obs;
   final _loadingNextPage = false.obs;
+  final scroll = ScrollVelocity.generate();
 
   List<MovieModel> get playingNow => [..._playingNow];
   List<MovieModel> get topMovies => [..._topMovies];
@@ -99,5 +101,11 @@ class TopRatedController extends GetxController {
       _loading(false);
     }
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    scroll.dispose();
+    super.onClose();
   }
 }

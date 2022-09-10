@@ -31,11 +31,20 @@ class SearchMoviesPage extends GetView<SearchMoviesController> {
           ),
         ],
       ),
-      body: Obx(() => _body(context)),
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: LayoutBuilder(
+            builder: (c, constrains) {
+              return Obx(() => _body(c, constrains));
+            },
+          ),
+        ),
+      ),
     );
   }
 
-  Widget _body(BuildContext context) {
+  Widget _body(BuildContext context, BoxConstraints constraints) {
     if (controller.loading) {
       return const Center(child: CupertinoActivityIndicator());
     } else if (controller.movies.isEmpty && controller.search.isNotEmpty) {
@@ -43,16 +52,24 @@ class SearchMoviesPage extends GetView<SearchMoviesController> {
     } else if (controller.movies.isEmpty) {
       return const Center(child: Text("Comece a pesquisar"));
     }
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: context.width ~/ 140,
-        mainAxisExtent: 265,
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: constraints.maxWidth ~/ 140,
+          mainAxisExtent: 265,
+          crossAxisSpacing: 5,
+        ),
+        controller: controller.scroll,
+        itemCount: controller.movies.length,
+        itemBuilder: (context, index) {
+          controller.changeIndex(index);
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: AppMovieCard(movie: controller.movies[index]),
+          );
+        },
       ),
-      itemCount: controller.movies.length,
-      itemBuilder: (context, index) {
-        controller.changeIndex(index);
-        return Center(child: AppMovieCard(movie: controller.movies[index]));
-      },
     );
   }
 }

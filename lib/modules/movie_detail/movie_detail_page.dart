@@ -31,7 +31,6 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
     final tag = movie.value.id.toString();
     Get.put(MovieDetailController(repository: Get.find()), tag: tag);
     controller = Get.find<MovieDetailController>(tag: tag);
-
     super.initState();
   }
 
@@ -54,12 +53,22 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
           })
         ],
       ),
-      body: _body(context),
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: LayoutBuilder(
+            builder: (c, constrains) {
+              return Obx(() => _body(c, constrains));
+            },
+          ),
+        ),
+      ),
     );
   }
 
-  Widget _body(BuildContext context) {
+  Widget _body(BuildContext context, BoxConstraints constraints) {
     return ListView(
+      controller: controller.scroll,
       children: [
         Hero(
           tag: controller.movie.hero,
@@ -226,13 +235,19 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
   Widget similares() {
     return SizedBox(
       height: 300,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: List.generate(
-          controller.moviesSimilares.length,
-          (index) => Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: AppMovieCard(movie: controller.moviesSimilares[index]),
+      child: Scrollbar(
+        thumbVisibility: true,
+        thickness: 10,
+        controller: controller.horizontalScroll,
+        child: ListView(
+          controller: controller.horizontalScroll,
+          scrollDirection: Axis.horizontal,
+          children: List.generate(
+            controller.moviesSimilares.length,
+            (index) => Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: AppMovieCard(movie: controller.moviesSimilares[index]),
+            ),
           ),
         ),
       ),

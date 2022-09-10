@@ -10,24 +10,38 @@ class FavoritesPage extends GetView<FavoritesController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Favoritos'), elevation: 0),
-      body: Obx(() {
-        if (controller.movies.isEmpty) {
-          return Center(
-            child: Text('Lista vazia', style: context.textTheme.headline5),
-          );
-        }
-        return GridView.builder(
-          itemCount: controller.movies.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisExtent: 265,
-            crossAxisSpacing: 10,
-          ),
-          itemBuilder: (c, index) {
-            return AppMovieCard(movie: controller.movies[index]);
-          },
-        );
-      }),
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: Obx(() {
+            if (controller.movies.isEmpty) {
+              return Center(
+                child: Text('Lista vazia', style: context.textTheme.headline5),
+              );
+            }
+            return LayoutBuilder(
+              builder: (c, constraints) => Padding(
+                padding: const EdgeInsets.all(10),
+                child: GridView.builder(
+                  itemCount: controller.movies.length,
+                  controller: controller.scroll,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: constraints.maxWidth ~/ 140,
+                    mainAxisExtent: 265,
+                    crossAxisSpacing: 5,
+                  ),
+                  itemBuilder: (c, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: AppMovieCard(movie: controller.movies[index]),
+                    );
+                  },
+                ),
+              ),
+            );
+          }),
+        ),
+      ),
     );
   }
 }

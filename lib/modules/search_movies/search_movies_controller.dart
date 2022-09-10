@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
+import 'package:movie_app/core/utils/scroll_velocity.dart';
 import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/repositories/movie_repository.dart';
 
@@ -13,6 +14,8 @@ class SearchMoviesController extends GetxController {
   final _loadingMore = false.obs;
   final _movies = <MovieModel>[].obs;
   final _search = "".obs;
+  final scroll = ScrollVelocity.generate();
+
   Timer? _debounce;
 
   int _page = 1;
@@ -58,5 +61,11 @@ class SearchMoviesController extends GetxController {
       });
     });
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    scroll.dispose();
+    super.onClose();
   }
 }
