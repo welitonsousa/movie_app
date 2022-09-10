@@ -14,13 +14,18 @@ class MoviesByGenreController extends GetxController {
   final _movies = <MovieModel>[].obs;
 
   int _page = 1;
+  bool stopRequests = false;
   bool get loading => _loading.value;
   bool get loadingMore => _loadingMore.value;
   List<MovieModel> get movies => [..._movies];
 
   Future<void> _findMovies() async {
-    final res = await _movieRepository.findMoviesByGenre(genre.id, page: _page);
-    _movies.value = [..._movies, ...res];
+    if (!stopRequests) {
+      final res =
+          await _movieRepository.findMoviesByGenre(genre.id, page: _page);
+      if (res.isEmpty) stopRequests = true;
+      _movies.value = [..._movies, ...res];
+    }
   }
 
   @override
@@ -31,13 +36,15 @@ class MoviesByGenreController extends GetxController {
   }
 
   Future<void> changeIndex(int index) async {
-    if (index == movies.length - 5 &&
-        !loadingMore &&
-        movies.length / 20 <= _page) {
-      _page += 1;
-      _loadingMore(true);
-      await _findMovies();
-      _loadingMore(false);
+    if (!stopRequests) {
+      if (index == movies.length - 5 &&
+          !loadingMore &&
+          movies.length / 20 <= _page) {
+        _page += 1;
+        _loadingMore(true);
+        await _findMovies();
+        _loadingMore(false);
+      }
     }
   }
 }

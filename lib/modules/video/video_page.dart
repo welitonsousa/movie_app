@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -19,51 +20,12 @@ class VideoPage extends GetView<VideoController> {
 
   Widget body(BuildContext context) {
     if (controller.loading.value) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(child: CupertinoActivityIndicator());
     }
     if (controller.videos.isEmpty) {
-      return const Center(
-        child: Text("Nenhum trailer encontrado"),
-      );
+      return const Center(child: Text("Nenhum trailer encontrado"));
     }
-    // return YoutubePlayer(
-    //   // bottomActions: [
-    //   //   CurrentPosition(),
-    //   //   ProgressBar(isExpanded: true),
-    //   //   const PlaybackSpeedButton(),
-    //   //   const SizedBox(width: 20),
-    //   //   RemainingDuration(),
-    //   //   IconButton(
-    //   //     onPressed: () async {
-    //   //       controller.videoControllers[i].toggleFullScreenMode();
-    //   //       if (context.orientation == Orientation.portrait) {
-    //   //         await controller.scrollController.animateTo(
-    //   //           i * context.width,
-    //   //           duration: const Duration(milliseconds: 500),
-    //   //           curve: Curves.linear,
-    //   //         );
-    //   //         controller.videoControllers[0].play();
-    //   //       }
-    //   //     },
-    //   //     icon: const Icon(Icons.fullscreen),
-    //   //   )
-    //   // ],
 
-    //   topActions: [
-    //     Visibility(
-    //       visible: context.orientation == Orientation.landscape,
-    //       child: IconButton(
-    //         onPressed: () {
-    //           SystemChrome.setPreferredOrientations(
-    //               [DeviceOrientation.portraitUp]);
-    //         },
-    //         icon: const Icon(Icons.arrow_back_ios),
-    //       ),
-    //     )
-    //   ],
-    //   controller: controller.videoControllers[0],
-    //   showVideoProgressIndicator: true,
-    // );
     return ListView.builder(
       controller: controller.scrollController,
       itemCount: controller.videos.length,

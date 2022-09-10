@@ -1,6 +1,7 @@
 import 'package:movie_app/core/rest_client/rest_client.dart';
 import 'package:movie_app/models/actor_model.dart';
 import 'package:movie_app/models/credit_model.dart';
+import 'package:movie_app/models/enums/country.dart';
 import 'package:movie_app/models/genre_model.dart';
 import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/models/provider_model.dart';
@@ -28,26 +29,27 @@ class MovieRepository {
     return res;
   }
 
-  Future<List<ProviderModel>> findMovieProviders(int id) async {
-    final res = <ProviderModel>[];
+  Future<Map<Countries, List<ProviderModel>>> findMovieProviders(int id) async {
+    Map<Countries, List<ProviderModel>> res = {};
+    res.values;
     final response = await _restClient.get('/movie/$id/watch/providers');
-    final languages = ['BR', 'US', 'PT', 'CA', 'ES'];
-    final payments = ['buy', 'flatrate'];
+    final payments = ['buy', 'flatrate', 'rent', 'ads'];
 
-    for (var language in languages) {
+    for (var country in Countries.values) {
+      List<ProviderModel> providers = [];
+
       for (var payment in payments) {
-        var providers = (response['results']?[language]?[payment] ?? [])
+        providers = (response['results']?[country.name]?[payment] ?? [])
             .map<ProviderModel>(ProviderModel.fromMap)
             .toList() as List<ProviderModel>;
+        providers.sort((a, b) => a.priority < b.priority ? 0 : 1);
+        if (!res.containsKey(country)) res[country] = [];
 
-        for (var e in providers) {
-          if (res.indexWhere((p) => p.name == e.name) == -1) {
-            res.add(e);
-          }
-        }
+        res[country]!.addAll(providers.where((e) {
+          return res[country]?.indexWhere((p) => e.name == p.name) == -1;
+        }).toList());
       }
     }
-    res.sort((a, b) => a.priority < b.priority ? 0 : 1);
     return res;
   }
 

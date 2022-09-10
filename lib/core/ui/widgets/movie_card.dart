@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movie_app/models/movie_model.dart';
@@ -33,19 +34,8 @@ class _AppMovieCardState extends State<AppMovieCard> {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Hero(
-                tag: widget.movie.poster,
-                child: CachedNetworkImage(
-                  imageUrl: widget.movie.poster,
-                  height: 210,
-                  fit: BoxFit.cover,
-                  width: widget.size,
-                  errorWidget: (c, s, d) => const Center(
-                    child: Text(
-                      "Não foi possível carregar esta imagem",
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
+                tag: widget.movie.hero,
+                child: _image(widget.movie.poster),
               ),
             ),
             SizedBox(
@@ -78,6 +68,40 @@ class _AppMovieCardState extends State<AppMovieCard> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _image(String url) {
+    if (url.contains('http')) {
+      return CachedNetworkImage(
+        imageUrl: url,
+        height: 210,
+        fit: BoxFit.cover,
+        width: widget.size,
+        placeholder: (context, url) {
+          return const Center(child: CupertinoActivityIndicator());
+        },
+        errorWidget: (context, url, error) {
+          return const Center(
+              child: Text("Não foi possível exibir esta imagem"));
+        },
+      );
+    }
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey),
+      ),
+      child: Image.asset(
+        url,
+        width: widget.size,
+        height: 210,
+        fit: BoxFit.fitWidth,
+        errorBuilder: (context, error, stackTrace) {
+          return const Center(
+              child: Text("Não foi possível exibir esta imagem"));
+        },
       ),
     );
   }

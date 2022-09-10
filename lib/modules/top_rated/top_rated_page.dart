@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/core/ui/widgets/app_carousel.dart';
@@ -13,6 +14,7 @@ class TopRatedPage extends GetView<TopRatedController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: const Text("Movie App"),
         actions: [
           _buttonGenre(
@@ -25,20 +27,26 @@ class TopRatedPage extends GetView<TopRatedController> {
         child: const Icon(Icons.search),
         onPressed: () => Get.toNamed(AppRouters.SEARCH_MOVIES),
       ),
-      body: Obx(
-        () => CustomScrollView(
+      body: Obx(() {
+        if (controller.loading) {
+          return const Center(child: CupertinoActivityIndicator());
+        }
+        return CustomScrollView(
           slivers: [
-            SliverAppBar(
-              expandedHeight: 250,
-              flexibleSpace: FlexibleSpaceBar(
-                background: carousel(context),
+            if (context.height > 500)
+              SliverAppBar(
+                expandedHeight: 220,
+                elevation: 0,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: carousel(context),
+                ),
               ),
-            ),
             SliverAppBar(
-              expandedHeight: 50,
+              pinned: true,
+              stretch: true,
               flexibleSpace: FlexibleSpaceBar(
                 background: Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
+                  padding: const EdgeInsets.only(bottom: 10),
                   child: FadeInRightBig(child: _genres),
                 ),
               ),
@@ -47,47 +55,41 @@ class TopRatedPage extends GetView<TopRatedController> {
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 260,
                 mainAxisExtent: 265,
-                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 0,
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   controller.getNextMovies(index);
-                  return AppMovieCard(
-                    movie: controller.topMovies[index],
-                    // size: 260,
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: AppMovieCard(movie: controller.topMovies[index]),
                   );
                 },
                 childCount: controller.topMovies.length,
               ),
             )
           ],
-        ),
-      ),
+        );
+      }),
     );
   }
 
   Widget carousel(BuildContext context) {
-    if (context.height <= 700 || controller.playingNow.isEmpty) {
+    if (context.height <= 500 || controller.playingNow.isEmpty) {
       return const SizedBox();
     }
     return FadeInDownBig(
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 1000),
-          child: Center(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: AppCarousel(
-                labels: controller.playingNow.map((e) => e.title).toList(),
-                images: controller.playingNow.map((e) => e.picture).toList(),
-                onClick: (index) {
-                  Get.toNamed(AppRouters.MOVIE_DETAIL,
-                      arguments: controller.playingNow[index]);
-                },
-              ),
-            ),
-          ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 5),
+        constraints: const BoxConstraints(maxWidth: 1000),
+        child: AppCarousel(
+          labels: controller.playingNow.map((e) => e.title).toList(),
+          images: controller.playingNow.map((e) => e.picture).toList(),
+          onClick: (index) {
+            Get.toNamed(AppRouters.MOVIE_DETAIL,
+                arguments: controller.playingNow[index]);
+          },
         ),
       ),
     );
@@ -96,7 +98,7 @@ class TopRatedPage extends GetView<TopRatedController> {
   Widget get _genres {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
-      height: 40,
+      // height: 40,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
@@ -124,7 +126,7 @@ class TopRatedPage extends GetView<TopRatedController> {
     Color color = const Color.fromARGB(255, 67, 30, 170),
   }) {
     return Padding(
-      padding: const EdgeInsets.only(right: 10),
+      padding: const EdgeInsets.only(right: 10, top: 10),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(100),
         child: ElevatedButton(

@@ -1,16 +1,21 @@
+import 'dart:io';
 import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clipboard/clipboard.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/core/ui/widgets/app_rating.dart';
 import 'package:movie_app/core/ui/widgets/movie_card.dart';
+import 'package:movie_app/env.dart';
+import 'package:movie_app/models/enums/country.dart';
 import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/modules/favorites/favorites_controller.dart';
 import 'package:movie_app/router/app_router.dart';
 import './movie_detail_controller.dart';
 
 class MovieDetailPage extends StatefulWidget {
-  const MovieDetailPage({Key? key}) : super(key: key);
+  const MovieDetailPage({super.key});
 
   @override
   State<MovieDetailPage> createState() => _MovieDetailPageState();
@@ -57,14 +62,18 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
     return ListView(
       children: [
         Hero(
-          tag: controller.movie.poster,
+          tag: controller.movie.hero,
           child: Container(
             constraints: const BoxConstraints(minHeight: 233),
             child: CachedNetworkImage(
               imageUrl: controller.movie.picture,
               width: double.infinity,
-              // height: context.heightTransformer(reducedBy: 30),
-              // alignment: Alignment.topCenter,
+              placeholder: (context, url) {
+                return const Center(child: CupertinoActivityIndicator());
+              },
+              errorWidget: (context, url, error) {
+                return Image.asset(Env.LOGO);
+              },
               fit: BoxFit.fitHeight,
             ),
           ),
@@ -74,12 +83,32 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                controller.movie.title,
-                style: context.textTheme.headline5,
+              Row(
+                children: [
+                  Expanded(
+                    child: SelectableText(
+                      controller.movie.title,
+                      style: context.textTheme.headline5,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      FlutterClipboard.copy(controller.movie.title);
+                      Get.snackbar(
+                          'Tudo pronto', 'O titulo do filme foi copiado',
+                          backgroundColor: Colors.green,
+                          snackPosition: Platform.isIOS
+                              ? SnackPosition.BOTTOM
+                              : SnackPosition.TOP,
+                          colorText: Colors.white);
+                    },
+                    tooltip: "Copiar titulo",
+                    icon: const Icon(Icons.copy),
+                  )
+                ],
               ),
               const SizedBox(height: 10),
-              Text(
+              SelectableText(
                 controller.movie.description,
                 style: context.textTheme.bodyText1,
                 textAlign: TextAlign.justify,
@@ -121,8 +150,28 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                   runSpacing: 10,
                   spacing: 10,
                   children: [
-                    Row(children: const [Text('Onde Assistir:')]),
-                    ...controller.providers
+                    Row(children: [
+                      const Text('Onde Assistir:'),
+                      const SizedBox(width: 10),
+                      SizedBox(
+                        width: 60,
+                        child: DropdownButton<Countries>(
+                          hint: Text(controller.country.value.name),
+                          isExpanded: true,
+                          items: Countries.values.map((e) {
+                            return DropdownMenuItem(
+                              child: Text(e.completeName),
+                              value: e,
+                            );
+                          }).toList(),
+                          onChanged: (v) => controller.changeCountry(v),
+                        ),
+                      )
+                    ]),
+                    if ((controller.providers[controller.country.value] ?? [])
+                        .isEmpty)
+                      const Text("Nenhum provedor para esta região"),
+                    ...(controller.providers[controller.country.value] ?? [])
                         .map((e) => Tooltip(
                               message: e.name,
                               child: SizedBox(

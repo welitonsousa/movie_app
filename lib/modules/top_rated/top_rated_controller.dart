@@ -25,6 +25,7 @@ class TopRatedController extends GetxController {
   List<GenreModel> get genres => [..._genres];
   List<ActorModel> get actors => [..._actors];
   bool get loading => _loading.value;
+  bool stopRequests = false;
 
   Future<void> findPlayingNow() async {
     try {
@@ -45,6 +46,7 @@ class TopRatedController extends GetxController {
   Future<void> findTopMovies() async {
     try {
       final res = await _moviesRepository.findTopMovies(page: _page.value);
+      if (res.isEmpty) stopRequests = true;
       _topMovies.value = [..._topMovies, ...res];
       _storage.write('top-movies', _topMovies.map((e) => e.toJson()).toList());
     } catch (e) {
@@ -72,10 +74,12 @@ class TopRatedController extends GetxController {
   }
 
   Future<void> getNextMovies(int index) async {
-    if (index == _topMovies.length - 10) {
-      if (!_loadingNextPage.value) {
-        _page.value += 1;
-        await findTopMovies();
+    if (!stopRequests) {
+      if (index == _topMovies.length - 10) {
+        if (!_loadingNextPage.value) {
+          _page.value += 1;
+          await findTopMovies();
+        }
       }
     }
   }
@@ -83,13 +87,17 @@ class TopRatedController extends GetxController {
   @override
   void onInit() async {
     _loading(true);
-    await Future.wait([
-      findPlayingNow(),
-      findTopMovies(),
-      findActorsOfWeek(),
-      findAllGenres(),
-    ]);
-    _loading(false);
+    try {
+      await Future.wait([
+        findPlayingNow(),
+        findTopMovies(),
+        findActorsOfWeek(),
+        findAllGenres(),
+      ]);
+      _loading(false);
+    } catch (e) {
+      _loading(false);
+    }
     super.onInit();
   }
 }

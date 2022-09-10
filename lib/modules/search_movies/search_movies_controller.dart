@@ -16,24 +16,30 @@ class SearchMoviesController extends GetxController {
   Timer? _debounce;
 
   int _page = 1;
+  bool stopRequests = false;
   bool get loading => _loading.value;
   bool get loadingMore => _loadingMore.value;
+  String get search => _search.value;
   List<MovieModel> get movies => [..._movies];
 
   Future<void> _findMovies(String word) async {
     final res = await _movieRepository.search(word, page: _page);
-    _movies.value = [...res];
+    if (res.isEmpty) stopRequests = true;
+    _movies.assignAll(res);
   }
 
   Future<void> changeIndex(int index) async {
-    if (index == movies.length - 5 &&
-        !loadingMore &&
-        movies.length / 20 <= _page) {
-      _page += 1;
-      _loadingMore(true);
-      final res = await _movieRepository.search(_search.value, page: _page);
-      _movies.value = [..._movies, ...res];
-      _loadingMore(false);
+    if (!stopRequests) {
+      if (index == movies.length - 5 &&
+          !loadingMore &&
+          movies.length / 20 <= _page) {
+        _page += 1;
+        _loadingMore(true);
+        final res = await _movieRepository.search(_search.value, page: _page);
+        if (res.isEmpty) stopRequests = true;
+        _movies.value = [..._movies, ...res];
+        _loadingMore(false);
+      }
     }
   }
 
@@ -47,6 +53,7 @@ class SearchMoviesController extends GetxController {
       if (_debounce?.isActive ?? false) _debounce?.cancel();
       _debounce = Timer(const Duration(milliseconds: 500), () async {
         _page = 1;
+        stopRequests = false;
         await _findMovies(_search.value);
       });
     });

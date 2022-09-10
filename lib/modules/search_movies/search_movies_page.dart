@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/core/ui/widgets/movie_card.dart';
@@ -36,12 +37,11 @@ class SearchMoviesPage extends GetView<SearchMoviesController> {
 
   Widget _body(BuildContext context) {
     if (controller.loading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (controller.movies.isEmpty) {
-      return const Center(
-        child: Text("Comece a pesquisar"),
-      );
+      return const Center(child: CupertinoActivityIndicator());
+    } else if (controller.movies.isEmpty && controller.search.isNotEmpty) {
+      return const Center(child: Text("Nenhum resultado encontrado"));
+    } else if (controller.movies.isEmpty) {
+      return const Center(child: Text("Comece a pesquisar"));
     }
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

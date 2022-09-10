@@ -30,4 +30,9 @@ class ProviderModel {
       id: map['provider_id']?.toInt() ?? 0,
     );
   }
+
+  @override
+  String toString() {
+    return name;
+  }
 }
