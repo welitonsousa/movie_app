@@ -36,6 +36,7 @@ class TopRatedPage extends GetView<TopRatedController> {
             if (context.height > 500)
               SliverAppBar(
                 expandedHeight: 220,
+                floating: true,
                 elevation: 0,
                 flexibleSpace: FlexibleSpaceBar(
                   background: carousel(context),
@@ -43,7 +44,6 @@ class TopRatedPage extends GetView<TopRatedController> {
               ),
             SliverAppBar(
               pinned: true,
-              stretch: true,
               flexibleSpace: FlexibleSpaceBar(
                 background: Padding(
                   padding: const EdgeInsets.only(bottom: 10),
