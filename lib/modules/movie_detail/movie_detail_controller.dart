@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:movie_app/core/utils/scroll_velocity.dart';
 import 'package:movie_app/models/credit_model.dart';
 import 'package:movie_app/models/enums/country.dart';
 import 'package:movie_app/models/movie_model.dart';
@@ -17,6 +18,8 @@ class MovieDetailController extends GetxController {
   final _storage = GetStorage();
   final providers = <Countries, List<ProviderModel>>{}.obs;
   final country = Countries.BR.obs;
+  final scroll = ScrollVelocity.generate();
+  final horizontalScroll = ScrollVelocity.generate();
 
   MovieModel get movie => _movie.value;
   List<CreditModel> get credits => [..._credits];
@@ -48,6 +51,13 @@ class MovieDetailController extends GetxController {
   void onReady() {
     Future.wait([movieCredits(), movieSimilares(), movieProviders()]);
     super.onReady();
+  }
+
+  @override
+  void onClose() {
+    scroll.dispose();
+    horizontalScroll.dispose();
+    super.onClose();
   }
 
   @override

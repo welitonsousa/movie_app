@@ -8,8 +8,7 @@ import 'package:movie_app/router/app_router.dart';
 import './top_rated_controller.dart';
 
 class TopRatedPage extends GetView<TopRatedController> {
-  const TopRatedPage({Key? key}) : super(key: key);
-
+  const TopRatedPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,51 +26,56 @@ class TopRatedPage extends GetView<TopRatedController> {
         child: const Icon(Icons.search),
         onPressed: () => Get.toNamed(AppRouters.SEARCH_MOVIES),
       ),
-      body: Obx(() {
-        if (controller.loading) {
-          return const Center(child: CupertinoActivityIndicator());
-        }
-        return CustomScrollView(
-          slivers: [
-            if (context.height > 500)
-              SliverAppBar(
-                expandedHeight: 220,
-                floating: true,
-                elevation: 0,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: carousel(context),
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: Obx(() {
+            if (controller.loading) {
+              return const Center(child: CupertinoActivityIndicator());
+            }
+            return CustomScrollView(
+              controller: controller.scroll,
+              slivers: [
+                if (context.height > 500)
+                  SliverAppBar(
+                    elevation: 0,
+                    floating: true,
+                    expandedHeight: 220,
+                    flexibleSpace:
+                        FlexibleSpaceBar(background: carousel(context)),
+                  ),
+                SliverAppBar(
+                  pinned: true,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: FadeInRightBig(child: _genres),
+                    ),
+                  ),
                 ),
-              ),
-            SliverAppBar(
-              pinned: true,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: FadeInRightBig(child: _genres),
-                ),
-              ),
-            ),
-            SliverGrid(
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 260,
-                mainAxisExtent: 265,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 0,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  controller.getNextMovies(index);
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: AppMovieCard(movie: controller.topMovies[index]),
-                  );
-                },
-                childCount: controller.topMovies.length,
-              ),
-            )
-          ],
-        );
-      }),
+                SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 260,
+                    mainAxisExtent: 265,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 0,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      controller.getNextMovies(index);
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: AppMovieCard(movie: controller.topMovies[index]),
+                      );
+                    },
+                    childCount: controller.topMovies.length,
+                  ),
+                )
+              ],
+            );
+          }),
+        ),
+      ),
     );
   }
 

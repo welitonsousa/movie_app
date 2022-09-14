@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:movie_app/core/utils/scroll_velocity.dart';
 import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/models/video_model.dart';
 import 'package:movie_app/repositories/movie_repository.dart';
@@ -8,12 +9,11 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoController extends GetxController {
   final _repository = Get.find<MovieRepository>();
-
   final movie = Get.arguments as MovieModel;
   final videos = <VideoModel>[];
   final videoControllers = <YoutubePlayerController>[];
   final loading = false.obs;
-  final scrollController = ScrollController();
+  final scrollController = ScrollVelocity.generate();
 
   Future<void> findVideos() async {
     try {

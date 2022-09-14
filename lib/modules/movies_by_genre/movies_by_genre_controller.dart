@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:movie_app/core/utils/scroll_velocity.dart';
 import 'package:movie_app/models/genre_model.dart';
 import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/repositories/movie_repository.dart';
@@ -12,6 +13,7 @@ class MoviesByGenreController extends GetxController {
   final _loading = false.obs;
   final _loadingMore = false.obs;
   final _movies = <MovieModel>[].obs;
+  final scroll = ScrollVelocity.generate();
 
   int _page = 1;
   bool stopRequests = false;
@@ -28,13 +30,6 @@ class MoviesByGenreController extends GetxController {
     }
   }
 
-  @override
-  void onInit() async {
-    _loading(true);
-    _findMovies().then((value) => _loading(false));
-    super.onInit();
-  }
-
   Future<void> changeIndex(int index) async {
     if (!stopRequests) {
       if (index == movies.length - 5 &&
@@ -46,5 +41,18 @@ class MoviesByGenreController extends GetxController {
         _loadingMore(false);
       }
     }
+  }
+
+  @override
+  void onInit() async {
+    _loading(true);
+    _findMovies().then((value) => _loading(false));
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    scroll.dispose();
+    super.onClose();
   }
 }
