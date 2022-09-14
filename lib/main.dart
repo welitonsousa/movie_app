@@ -18,13 +18,13 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 Future<void> main() async {
-  HttpOverrides.global = MyHttpOverrides();
+  // HttpOverrides.global = MyHttpOverrides();
   await GetStorage.init();
   runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -42,6 +42,7 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       theme: ThemeData.dark().copyWith(
           primaryColor: const Color(0xFF151C26),
+          splashColor: const Color(0xFF151C26),
           appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF151C26)),
           scaffoldBackgroundColor: const Color(0xFF151C26),
           platform: TargetPlatform.iOS),

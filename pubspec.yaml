@@ -21,6 +21,7 @@ dependencies:
   clipboard: ^0.1.3
   msix: ^2.8.18
   url_launcher: ^6.1.5
+  flutter_native_splash: ^2.2.9
 
 dev_dependencies:
   flutter_test:
@@ -31,6 +32,13 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/logo-dark.png
+flutter_native_splash:
+  color: "#151C26"
+  image: assets/images/logo-dark.png
+  image_dark: assets/images/logo-dark.png
+  color_dark: "#151C26"
+  android: true
+  ios: true
   # example:
   # fonts:
   #   - family: Schyler

@@ -58,7 +58,7 @@ class TopRatedPage extends GetView<TopRatedController> {
                     maxCrossAxisExtent: 260,
                     mainAxisExtent: 265,
                     mainAxisSpacing: 10,
-                    crossAxisSpacing: 0,
+                    crossAxisSpacing: 10,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
@@ -85,7 +85,7 @@ class TopRatedPage extends GetView<TopRatedController> {
     }
     return FadeInDownBig(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
+        // padding: const EdgeInsets.symmetric(horizontal: 5),
         constraints: const BoxConstraints(maxWidth: 1000),
         child: AppCarousel(
           labels: controller.playingNow.map((e) => e.title).toList(),
@@ -101,7 +101,7 @@ class TopRatedPage extends GetView<TopRatedController> {
 
   Widget get _genres {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
+      // margin: const EdgeInsets.symmetric(horizontal: 10),
       // height: 40,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
       child: ListView.builder(
@@ -130,7 +130,7 @@ class TopRatedPage extends GetView<TopRatedController> {
     Color color = const Color.fromARGB(255, 67, 30, 170),
   }) {
     return Padding(
-      padding: const EdgeInsets.only(right: 10, top: 10),
+      padding: const EdgeInsets.only(right: 5, top: 10, left: 10),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(100),
         child: ElevatedButton(
